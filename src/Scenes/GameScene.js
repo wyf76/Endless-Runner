@@ -75,7 +75,7 @@ class GameScene extends Phaser.Scene {
     this.wasOnFloor = true;
   }
 
-  update(time, delta) {
+  update() {
     // Scroll the background.
     this.bg.tilePositionX += 5;
 
@@ -91,14 +91,9 @@ class GameScene extends Phaser.Scene {
     // Animation control:
     // If the player is not on the floor, ensure the jump animation is playing.
     if (!this.player.body.onFloor()) {
-      if (!this.player.anims.currentAnim || this.player.anims.currentAnim.key !== 'jump') {
-        this.player.anims.play('jump');
-      }
+      this.player.anims.play('jump', true);
     } else {
-      // If the player is on the floor, revert to the stand animation if not already playing it.
-      if (!this.player.anims.currentAnim || this.player.anims.currentAnim.key !== 'stand') {
-        this.player.anims.play('stand', true);
-      }
+      this.player.anims.play('stand', true);
     }
 
     // Play the landing sound when the player lands (transitioning from airborne to on the floor).
@@ -124,7 +119,6 @@ class GameScene extends Phaser.Scene {
     let randomY = 550 + Phaser.Math.Between(-30, 30);
     let obstacle = this.obstacles.create(800, randomY, "obstacle").setScale(0.06);
     obstacle.setVelocityX(-200);
-    obstacle.setImmovable(true);
     obstacle.body.allowGravity = false;
 
     // Gradually decrease the obstacle spawn delay (minimum of 800ms).
@@ -136,7 +130,7 @@ class GameScene extends Phaser.Scene {
     if (this.isGameOver) return;
     this.isGameOver = true;
     this.sound.play("hitSound");
-    this.sound.stopAll();
+    this.sound.stopByKey("menuMusic");
     this.scene.start("GameOverScene", { score: Math.floor(this.score) });
   }
 }

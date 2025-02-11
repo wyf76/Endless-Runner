@@ -10,7 +10,7 @@ class CreditsScene extends Phaser.Scene {
     const creditsText =
       "Credits:\n\n" +
       "Game Design & Programming: Yufan Weng\n" +
-      "Artwork: Created by me\n" +
+      "Artwork: Yufan Weng\n" +
       "Music: https://freesound.org/\n" +
       "Sound Effects: https://freesound.org/\n\n" +
       "Click anywhere to return to Menu";
