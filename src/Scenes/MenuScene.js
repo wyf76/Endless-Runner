@@ -26,8 +26,8 @@ class MenuScene extends Phaser.Scene {
         this.scene.start("GameScene");
       });
       
-      // Create credits button.
-      let creditsButton = this.add.text(400, 350, "Credits", { fontSize: "20px", fill: "#fff" })
+      // Create credits button, moved down to y = 400 and changed its font color to black for contrast.
+      let creditsButton = this.add.text(400, 400, "Credits", { fontSize: "20px", fill: "#000" })
                                   .setOrigin(0.5)
                                   .setInteractive();
       creditsButton.on("pointerdown", () => {
