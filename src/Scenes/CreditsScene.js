@@ -4,7 +4,6 @@ class CreditsScene extends Phaser.Scene {
   }
 
   create() {
-    // Optional: Add a semi-transparent white rectangle as a background for the text to improve readability.
     this.add.rectangle(400, 300, 800, 600, 0xffffff, 0.7);
 
     const creditsText =

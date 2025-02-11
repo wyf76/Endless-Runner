@@ -1,5 +1,5 @@
 /*
- * Name: Your Name
+ * Name: Yufan Weng
  * Game Title: Endless Runner
  * Hours Spent: ~18 hours
  * Creative Tilt:

@@ -9,7 +9,7 @@ class MenuScene extends Phaser.Scene {
     }
 
     create() {
-        // Set background color (optional)
+        // Set background color
         this.cameras.main.setBackgroundColor("#32CD32"); // Same green as before
 
         // Game Title

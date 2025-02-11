@@ -6,8 +6,8 @@ class GameScene extends Phaser.Scene {
   preload() {
     // Load the player spritesheet (2 frames: frame 0 = standing, frame 1 = jumping).
     this.load.spritesheet("player", "./assets/player.png", {
-      frameWidth: 32,   // Adjust as needed.
-      frameHeight: 48   // Adjust as needed.
+      frameWidth: 32,   
+      frameHeight: 48 
     });
     this.load.image("background", "./assets/background.png");
     this.load.image("obstacle", "./assets/obstacle.png");
