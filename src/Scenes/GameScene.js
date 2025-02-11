@@ -114,4 +114,11 @@ class GameScene extends Phaser.Scene {
     this.time.delayedCall(this.obstacleSpawnDelay, this.spawnObstacle, [], this);
   }
 
-  handl
+  handleGameOver(player, obstacle) {
+    if (this.isGameOver) return;
+    this.isGameOver = true;
+    this.sound.play("hitSound");
+    this.sound.stopAll();
+    this.scene.start("GameOverScene", { score: Math.floor(this.score) });
+  }
+}
