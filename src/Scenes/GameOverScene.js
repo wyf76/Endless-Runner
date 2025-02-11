@@ -9,7 +9,7 @@ class GameOverScene extends Phaser.Scene {
     }
   
     create() {
-      // Display game over text and final score.
+      // Display Game Over text and the final score.
       this.add.text(400, 150, "Game Over", { fontSize: "32px", fill: "#fff" }).setOrigin(0.5);
       this.add.text(400, 200, "Score: " + this.finalScore, { fontSize: "24px", fill: "#fff" }).setOrigin(0.5);
       this.add.text(400, 250, "Click to Restart", { fontSize: "20px", fill: "#fff" }).setOrigin(0.5);

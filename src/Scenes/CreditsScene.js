@@ -6,10 +6,9 @@ class CreditsScene extends Phaser.Scene {
   create() {
     const creditsText =
       "Credits:\n\n" +
-      "Game Design & Programming: Your Name\n" +
+      "Game Design & Programming: Yufan Weng\n" +
       "Artwork: Created by me\n" +
-      "Music: Royalty-free sources\n" +
-      "Sound Effects: Royalty-free sources\n\n" +
+      "Music: https://freesound.org/\n" +
       "Click anywhere to return to Menu";
 
     this.add.text(400, 300, creditsText, { fontSize: "18px", fill: "#fff", align: "center" })

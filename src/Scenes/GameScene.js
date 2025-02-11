@@ -4,16 +4,17 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    // Load the player spritesheet (2 frames: standing and jumping).
+    // Load the player spritesheet (2 frames: frame 0 = standing, frame 1 = jumping).
     this.load.spritesheet("player", "./assets/player.png", {
-      frameWidth: 32,   // Adjust to match your asset's frame width.
-      frameHeight: 48   // Adjust to match your asset's frame height.
+      frameWidth: 32,   // Adjust as needed.
+      frameHeight: 48   // Adjust as needed.
     });
     this.load.image("background", "./assets/background.png");
     this.load.image("obstacle", "./assets/obstacle.png");
     this.load.audio("gameMusic", "./assets/game_music.wav");
-    this.load.audio("jumpSound", "./assets/jump.wav");
-    this.load.audio("hitSound", "./assets/hit.wav");
+    this.load.audio("jumpSound", "./assets/jump.wav");     // SFX #1.
+    this.load.audio("hitSound", "./assets/hit.wav");         // SFX #2.
+    this.load.audio("landSound", "./assets/land.wav");       // SFX #4.
   }
 
   create() {
@@ -21,10 +22,10 @@ class GameScene extends Phaser.Scene {
     this.bg = this.add.tileSprite(400, 300, 800, 600, "background");
 
     // Create the player sprite and enable physics.
-    this.player = this.physics.add.sprite(100, 450, "player").setScale(2.5);
+    this.player = this.physics.add.sprite(100, 450, "player").setScale(2.0);
     this.player.setCollideWorldBounds(true);
 
-    // Create the "stand" animation using frame 0 (standing image).
+    // Create the "stand" animation using frame 0.
     this.anims.create({
       key: 'stand',
       frames: [{ key: 'player', frame: 0 }],
@@ -32,7 +33,7 @@ class GameScene extends Phaser.Scene {
       repeat: -1
     });
 
-    // Create the "jump" animation using frame 1 (jumping image).
+    // Create the "jump" animation using frame 1.
     this.anims.create({
       key: 'jump',
       frames: [{ key: 'player', frame: 1 }],
@@ -47,7 +48,7 @@ class GameScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-    // Create an obstacles group and add collision detection.
+    // Create an obstacles group and set up collision detection.
     this.obstacles = this.physics.add.group();
     this.physics.add.collider(this.player, this.obstacles, this.handleGameOver, null, this);
 
@@ -69,6 +70,9 @@ class GameScene extends Phaser.Scene {
 
     // Play looping game background music.
     this.sound.play("gameMusic", { loop: true });
+
+    // For detecting landing events (to play the landing sound).
+    this.wasOnFloor = true;
   }
 
   update(time, delta) {
@@ -81,20 +85,27 @@ class GameScene extends Phaser.Scene {
          this.player.body.onFloor()) {
       this.sound.play("jumpSound");
       this.player.setVelocityY(-400);
+      this.player.anims.play('jump');
     }
 
     // Animation control:
-    // If the player is NOT on the floor, always display the jump animation.
+    // If the player is not on the floor, ensure the jump animation is playing.
     if (!this.player.body.onFloor()) {
       if (!this.player.anims.currentAnim || this.player.anims.currentAnim.key !== 'jump') {
         this.player.anims.play('jump');
       }
     } else {
-      // If the player is on the floor, show the stand animation.
+      // If the player is on the floor, revert to the stand animation if not already playing it.
       if (!this.player.anims.currentAnim || this.player.anims.currentAnim.key !== 'stand') {
         this.player.anims.play('stand', true);
       }
     }
+
+    // Play the landing sound when the player lands (transitioning from airborne to on the floor).
+    if (!this.wasOnFloor && this.player.body.onFloor()) {
+      this.sound.play("landSound");
+    }
+    this.wasOnFloor = this.player.body.onFloor();
 
     // Increase the score slowly and update the display (using Math.floor to avoid decimals).
     this.score += 0.2;
@@ -109,13 +120,14 @@ class GameScene extends Phaser.Scene {
   }
 
   spawnObstacle() {
-    // Create an obstacle at the right edge of the screen.
-    let obstacle = this.obstacles.create(800, 550, "obstacle").setScale(0.05);
+    // Add a slight random variation to the obstacle's vertical position.
+    let randomY = 550 + Phaser.Math.Between(-30, 30);
+    let obstacle = this.obstacles.create(800, randomY, "obstacle").setScale(0.06);
     obstacle.setVelocityX(-200);
     obstacle.setImmovable(true);
     obstacle.body.allowGravity = false;
 
-    // Gradually decrease the obstacle spawn delay (with a minimum of 800ms).
+    // Gradually decrease the obstacle spawn delay (minimum of 800ms).
     this.obstacleSpawnDelay = Math.max(800, this.obstacleSpawnDelay - 10);
     this.time.delayedCall(this.obstacleSpawnDelay, this.spawnObstacle, [], this);
   }
